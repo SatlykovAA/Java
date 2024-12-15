@@ -1,0 +1,92 @@
+1. Дана строка sql-запроса "select * from students where ". Сформируйте часть WHERE этого запроса,
+используя StringBuilder. Данные для фильтрации приведены ниже в виде json строки.
+Если значение null, то параметр не должен попадать в запрос.
+Параметры для фильтрации: {"name":"Ivanov", "country":"Russia", "city":"Moscow", "age":"null"}
+import org.json.JSONObject;
+
+public class Main {
+    public static void main(String[] args) {
+        
+        String baseQuery = "select * from students where ";
+
+        
+        String jsonString = "{\"name\":\"Ivanov\", \"country\":\"Russia\", \"city\":\"Moscow\", \"age\":\"null\"}";
+
+        
+        JSONObject filters = new JSONObject(jsonString);
+
+        
+        StringBuilder whereClause = new StringBuilder();
+
+        
+        for (String key : filters.keySet()) {
+            String value = filters.getString(key);
+
+            
+            if (!"null".equals(value)) {
+                if (whereClause.length() > 0) {
+                    whereClause.append(" AND ");
+                }
+                whereClause.append(key).append(" = '").append(value).append("'");
+            }
+        }
+
+        
+        if (whereClause.length() > 0) {
+            baseQuery += whereClause.toString();
+        } else {
+            baseQuery = baseQuery.replace(" where ", ""); 
+        }
+
+       System.out.println(baseQuery);
+    }
+}
+2. Реализуйте алгоритм сортировки пузырьком числового массива, результат после каждой итерации
+запишите в лог-файл.
+
+import org.json.JSONObject;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
+
+public class Main {
+    public static void main(String[] args) {
+        
+        int[] numbers = {5, 2, 9, 1, 5, 6};
+
+        
+        String logFile = "bubble_sort_log.txt";
+
+        
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(logFile))) {
+            boolean swapped;
+            for (int i = 0; i < numbers.length - 1; i++) {
+                swapped = false;
+                for (int j = 0; j < numbers.length - 1 - i; j++) {
+                    if (numbers[j] > numbers[j + 1]) {
+                        // Обмен значений
+                        int temp = numbers[j];
+                        numbers[j] = numbers[j + 1];
+                        numbers[j + 1] = temp;
+                        swapped = true;
+                    }
+                }
+
+               
+                writer.write("Iteration " + (i + 1) + ": " + Arrays.toString(numbers));
+                writer.newLine();
+
+                
+                if (!swapped) {
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Ошибка при записи в лог-файл: " + e.getMessage());
+        }
+
+        // Вывод итогового отсортированного массива
+        System.out.println("Отсортированный массив: " + Arrays.toString(numbers));
+    }
+}
