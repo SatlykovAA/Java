@@ -1,0 +1,22 @@
+public class Main {
+    public static void main(String[] args) {
+        
+        List<Integer> numbers = new ArrayList<>(Arrays.asList(5, 2, 9, 1, 5, 6, 8, 3));
+
+        
+        numbers.removeIf(n -> n % 2 == 0);
+        System.out.println("Список после удаления четных чисел: " + numbers);
+
+        
+        int min = Collections.min(numbers);
+        System.out.println("Минимальное значение: " + min);
+
+        
+        int max = Collections.max(numbers);
+        System.out.println("Максимальное значение: " + max);
+
+        
+        double average = numbers.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+        System.out.println("Среднее значение: " + average);
+    }
+}
